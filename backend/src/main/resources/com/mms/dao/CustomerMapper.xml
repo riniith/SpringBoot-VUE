@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mms.dao.CustomerMapper">
+	<update id="updateByPrimaryKey">
+		UPDATE `test`.`customer`
+		SET
+		`name`=#{name},
+		`phone`=#{phone},
+		`FAX`=#{FAX},
+		`website`=#{website},
+		`address`=#{address},
+		`employeesNumber`=#{employeesNumber},
+		`AnnualSales`=#{AnnualSales},
+		`BranchName`=#{BranchName},
+		`Payment`=#{Payment},
+		`depositCategory`=#{depositCategory},
+		`postalCode`=#{postalCode},
+		`expertiseAreas`=#{expertiseAreas},
+		`customerCategory`=#{customerCategory},
+		`bankName`=#{bankName}, `Accounts`=#{Accounts},
+		`nominalPerson`=#{nominalPerson},
+		`dealDate`=#{dealDate},
+		`ownerUsername`=#{ownerUsername},
+		`remarks`=#{remarks}
+		WHERE `custId`=#{custId} ;
+	</update>
+	
+	<select id="selectByNameOrPhoneLike" resultType="com.mms.entity.Customer">
+		SELECT * FROM customer WHERE name LIKE CONCAT('%', #{nameOrPhone}, '%') OR phone LIKE CONCAT('%', #{nameOrPhone}, '%')
+	</select>
+	
+	<insert id="insert" useGeneratedKeys="true" keyProperty="custId">
+		INSERT INTO `test`.`customer`
+		(`name`, `phone`, `FAX`, `website`, `address`, `employeesNumber`, `AnnualSales`, `BranchName`, `Payment`, `depositCategory`, `postalCode`, `expertiseAreas`, `customerCategory`, `bankName`, `Accounts`, `nominalPerson`, `dealDate`, `ownerUsername`, `remarks`)
+		VALUES (#{name}, #{phone}, #{FAX}, #{website}, #{address}, #{employeesNumber}, #{AnnualSales}, #{BranchName}, #{Payment}, #{depositCategory}, #{postalCode}, #{expertiseAreas}, #{customerCategory}, #{bankName}, #{Accounts},#{nominalPerson}, #{dealDate}, #{ownerUsername}, #{remarks});
+	</insert>
+
+	<delete id="deleteByPrimaryKey">
+		DELETE FROM customer WHERE custId = #{custId}
+	</delete>
+	
+	<select id="countByNameOrPhoneLikeAndStateAndOwnerUsername" resultType="long">
+		SELECT COUNT(0) FROM customer 
+		<where>
+			<if test="nameOrPhone != null and nameOrPhone != ''">
+				AND (name LIKE CONCAT('%', #{nameOrPhone}, '%') OR phone LIKE CONCAT('%', #{nameOrPhone}, '%'))
+			</if>
+			<if test="customerState != null">
+				AND state = #{customerState}
+			</if>
+			<if test="username != null and username != ''">
+				AND owner_username = #{username}
+			</if>
+		</where>
+	</select>
+
+	<select id="countByNameOrPhoneLikeAndOwnerUsername" resultType="long">
+		SELECT COUNT(0) FROM customer
+		<where>
+			<if test="nameOrPhone != null and nameOrPhone != ''">
+				AND (name LIKE CONCAT('%', #{nameOrPhone}, '%') OR phone LIKE CONCAT('%', #{nameOrPhone}, '%'))
+			</if>
+			<if test="customerState != null">
+				AND state = #{customerState}
+			</if>
+			<if test="username != null and username != ''">
+				AND owner_username = #{username}
+			</if>
+		</where>
+	</select>
+	
+	<select id="selectByNameOrPhoneLikeAndOwnerUsernamePageable" resultType="com.mms.entity.Customer">
+		SELECT * FROM customer 
+		<where>
+			<if test="nameOrPhone != null and nameOrPhone != ''">
+				AND (name LIKE CONCAT('%', #{nameOrPhone}, '%') OR phone LIKE CONCAT('%', #{nameOrPhone}, '%'))
+			</if>
+			<if test="ownerUsername != null and ownerUsername != ''">
+				AND ownerUsername = #{ownerUsername}
+			</if>
+		</where>
+		ORDER BY cust_id DESC
+		LIMIT #{skip}, #{take}
+	</select>
+	
+</mapper>

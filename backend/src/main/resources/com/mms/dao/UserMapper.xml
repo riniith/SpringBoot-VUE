@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mms.dao.UserMapper">
+	<select id="selectByUsernameAndPassword" resultType="com.mms.entity.User">
+		SELECT username, password, enabled, role, manager FROM `user` 
+		WHERE username = #{username} AND password = #{password}
+	</select>
+	<insert id="insert">
+		INSERT INTO `user`(username, password, enabled, role, manager) 
+		VALUES(#{username}, #{password}, #{enabled}, #{role}, #{manager})
+	</insert>
+	<update id="updateEnabledByUsername">
+		UPDATE `user` SET enabled = #{enabled} WHERE username = #{username}
+	</update>
+	<update id="updatePasswordByUsername">
+		UPDATE `user` SET password = #{password} WHERE username = #{username}
+	</update>
+</mapper>

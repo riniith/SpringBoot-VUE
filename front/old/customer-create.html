@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" style="font-size: 14px">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>录入客户信息</title>
+		<link rel="stylesheet" href="bootstrap/css/bootstrap.css" />
+	</head>
+
+	<body>
+		<div class="container">
+			<!-- 查重入口 -->
+			<div class="alert alert-warning text-center" role="alert">
+				<span
+					>录入客户信息之前，建议查重，以免造成您和同事之间的业务冲突！</span
+				>
+				<button class="btn btn-danger">立即查重</button>
+			</div>
+			<!-- 表单 -->
+			<form class="form-container w-50 mx-auto" action="">
+				<input type="hidden" name="ownerUsername" id="ownerUsername" />
+				<!-- 表单中的栏位 -->
+				<div class="row mb-3">
+					<label class="col-2 col-form-label" for="customerName"
+						>客户名称</label
+					>
+					<div class="col-10">
+						<input
+							type="text"
+							class="form-control"
+							id="customerName"
+							name="name"
+						/>
+					</div>
+				</div>
+				<div class="row mb-3">
+					<label class="col-2 col-form-label" for="">客户性别</label>
+					<div class="col-10">
+						<div
+							class="btn-group"
+							role="group"
+							aria-label="Basic radio toggle button group"
+						>
+							<input
+								type="radio"
+								class="btn-check"
+								name="gender"
+								value="MALE"
+								id="btnradio1"
+								autocomplete="off"
+								checked
+							/>
+							<label class="btn btn-outline-primary" for="btnradio1">男</label>
+
+							<input
+								type="radio"
+								class="btn-check"
+								name="gender"
+								value="FEMALE"
+								id="btnradio2"
+								autocomplete="off"
+							/>
+							<label class="btn btn-outline-primary" for="btnradio2">女</label>
+						</div>
+					</div>
+				</div>
+				<div class="row mb-3">
+					<label class="col-2 col-form-label" for="customerAddress"
+						>客户地址</label
+					>
+					<div class="col-10">
+						<input
+							type="text"
+							class="form-control"
+							id="customerAddress"
+							name="address"
+						/>
+					</div>
+				</div>
+				<div class="row mb-3">
+					<label class="col-2 col-form-label" for="customerPhone"
+						>联系电话</label
+					>
+					<div class="col-10">
+						<input
+							type="text"
+							class="form-control"
+							id="customerPhone"
+							name="phone"
+						/>
+					</div>
+				</div>
+				<div class="row mb-3">
+					<label class="col-2 col-form-label" for="customerSource"
+						>客户来源</label
+					>
+					<div class="col-10">
+						<select name="source" id="customerSource" class="form-select">
+							<option value="WORD_OF_MOUTH">口碑</option>
+							<option value="MEDIA">新媒体</option>
+							<option value="PROMOTION">地推活动</option>
+						</select>
+					</div>
+				</div>
+				<div class="row mb-3">
+					<label class="col-2 col-form-label" for="customerStatus"
+						>客户状态</label
+					>
+					<div class="col-10">
+						<select name="state" id="customerStatus" class="form-select">
+							<option value="UNKNOWN">意向不明</option>
+							<option value="INTENTIONAL">有意向</option>
+							<option value="DEALED">成交</option>
+						</select>
+					</div>
+				</div>
+				<div class="row mb-3">
+					<label class="col-2 col-form-label" for="lastTraceDate"
+						>最后跟进日期</label
+					>
+					<div class="col-10">
+						<input
+							type="date"
+							class="form-control"
+							id="lastTraceDate"
+							name="lastFollowUpDate"
+						/>
+					</div>
+				</div>
+				<div class="row mb-3">
+					<label class="col-2 col-form-label" for="lastTraceContent"
+						>最后跟进情况</label
+					>
+					<div class="col-10">
+						<textarea
+							class="form-control"
+							rows="3"
+							id="lastTraceContent"
+							name="lastFollowUpNote"
+						></textarea>
+					</div>
+				</div>
+				<div class="row mb-3">
+					<label class="col-2 col-form-label" for=""></label>
+					<div class="col-10">
+						<button
+							onclick="handleSave()"
+							type="button"
+							class="btn btn-primary"
+							style="width: 120px"
+						>
+							保 存
+						</button>
+					</div>
+				</div>
+			</form>
+		</div>
+		<script src="bootstrap/js/bootstrap.bundle.js"></script>
+		<script src="jquery/jquery-3.6.0.js"></script>
+		<script>
+			// 文档加载完成时，从sessionStorage中获取CURRENT_USER
+			$(document).ready(function () {
+				const jsonString = sessionStorage.getItem("CURRENT_USER");
+				const currentUser = JSON.parse(jsonString);
+				$("#ownerUsername").val(currentUser.username);
+			});
+
+			function handleSave() {
+				// 获取表单中的各项数据
+				const data = $("form").serialize();
+				// 使用jQuery发送post请求
+				$.ajax({
+					url: "http://localhost:8080/customer/create",
+					method: "POST",
+					data: data,
+					dataType: "json",
+					success: (resp) => {
+						// 由于后端返回的是boolean，所以resp当然是个boolean值
+						if (resp) {
+							alert("数据保存成功");
+						} else {
+							alert("数据保存失败");
+						}
+					},
+				});
+			}
+		</script>
+	</body>
+</html>

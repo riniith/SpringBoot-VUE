@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" style="font-size: 14px">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>查看客户信息界面</title>
+		<link rel="stylesheet" href="bootstrap/css/bootstrap.css" />
+	</head>
+
+	<body>
+		<div class="container" id="app">
+			<!-- 查询条件区域 -->
+			<div
+				class="d-grid gap-5 mb-3"
+				style="grid-template-columns: 2fr 1fr 1fr 1fr"
+			>
+				<input
+					v-model="nameOrPhone"
+					class="form-control"
+					type="text"
+					placeholder="客户姓名 / 联系电话"
+				/>
+				<select class="form-select" v-model="state">
+					<option value="">请选择状态</option>
+					<option value="UNKNOWN">意向不明</option>
+					<option value="INTENTIONAL">有意向</option>
+					<option value="DEALED">成交</option>
+				</select>
+				<select class="form-select" v-model="ownerUsername">
+					<option value="">请选择员工</option>
+					<option :value="user.username" v-for="user in users">
+						{{user.username}}
+					</option>
+				</select>
+				<button @click="handleSearch" class="btn btn-primary">查 询</button>
+			</div>
+			<!-- 数据表格区域 -->
+			<table class="table table-hover mb-3">
+				<thead>
+					<tr>
+						<th>报备日期</th>
+						<th>客户姓名</th>
+						<th>性别</th>
+						<th>客户地址</th>
+						<th>联系电话</th>
+						<th>最后跟进日期</th>
+						<th>客户来源</th>
+						<th>状态</th>
+						<th>成交日期</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr v-for="cust in searchResult.list">
+						<td>{{cust.reportToDate}}</td>
+						<td>{{cust.name}}</td>
+						<td>{{cust.gender}}</td>
+						<td>{{cust.address}}</td>
+						<td>{{cust.phone}}</td>
+						<td>{{cust.lastFollowUpDate}}</td>
+						<td>{{cust.source}}</td>
+						<td>{{cust.state}}</td>
+						<td>{{cust.dealDate}}</td>
+						<td><button>写跟进</button></td>
+					</tr>
+				</tbody>
+			</table>
+			<!-- 分页栏 -->
+			<nav aria-label="Page navigation example">
+				<ul class="pagination justify-content-center">
+					<li class="page-item">
+						<a class="page-link" href="#" aria-label="Previous">
+							<span aria-hidden="true">&laquo;</span>
+						</a>
+					</li>
+					<li class="page-item"><a class="page-link" href="#">1</a></li>
+					<li class="page-item active"><a class="page-link" href="#">2</a></li>
+					<li class="page-item"><a class="page-link" href="#">3</a></li>
+					<li class="page-item"><a class="page-link" href="#">4</a></li>
+					<li class="page-item"><a class="page-link" href="#">5</a></li>
+					<li class="page-item"><a class="page-link" href="#">6</a></li>
+					<li class="page-item"><a class="page-link" href="#">7</a></li>
+					<li class="page-item">
+						<a class="page-link" href="#" aria-label="Next">
+							<span aria-hidden="true">&raquo;</span>
+						</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+		<script src="bootstrap/js/bootstrap.bundle.js"></script>
+		<script src="vue/vue.js"></script>
+		<script>
+			var app = new Vue({
+				el: "#app",
+				data: {
+					// 用户列表
+					users: [],
+					// 查询条件
+					nameOrPhone: "",
+					state: "",
+					ownerUsername: "",
+					// 查询结果
+					searchResult: {
+						list: [],
+						total: 0,
+					},
+				},
+				created() {
+					// 请求后端，得到用户列表
+					fetch("http://localhost:8080/user/list").then((resp) => {
+						resp.json().then((users) => {
+							this.users = users;
+						});
+					});
+				},
+				methods: {
+					handleSearch() {
+						// 请求后端，传递查询条件，得到查询结果，更新data里面的searchResult
+						fetch(
+							`http://localhost:8080/customer/search?nameOrPhone=${this.nameOrPhone}&state=${this.state}&ownerUsername=${this.ownerUsername}`
+						)
+							.then((resp) => resp.json())
+							.then((data) => {
+								this.searchResult = data;
+							});
+					},
+				},
+			});
+		</script>
+	</body>
+</html>
