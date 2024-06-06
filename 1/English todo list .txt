@@ -1,0 +1,11 @@
+English todo list
+13/1
+Introduce myself
+Ok, let me introduce myself now.
+My name is Zhao Yifei. At the age of 23, I majored in international business. I studied Japanese by myself and took the n2 exam. After graduating from university in 2020, he entered Gu Shanghai in the same year to work in Japanese-oriented e-commerce, and resigned one year later in order to change careers. After that, I spent 4 and a half months learning French and achieved the achievement of tef b1. After that, I learned IT by myself, mastered java, spring and its framework, and was familiar with the use of MySQL database. I have three projects. Independent implementation of HTTP server and MVC framework. The forum project based on Spring Spring MVC Mybatis and MySQL has been independently implemented. It includes common functions in user management, login and login, permission verification, Linux environment construction, and can be completed quickly. The third is a small customer relationship management system based on Spring Springboot Mybatis and MySQL, vue and axios. Thank you for giving me this interview. That's my self-introduction.
+
+Self-expression
+
+Topic 1
+I have always been interested in the French Revolution
+
